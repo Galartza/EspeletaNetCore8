@@ -1,0 +1,86 @@
+@{
+    ViewData["Title"] = "Listado de Ejercicios Físicos";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+
+<button type="button" class="btn btn-primary mb-3" data-bs-toggle="modal" data-bs-target="#ModalEjercicioFisico">
+      Crear Registro Ejercicios
+    </button>
+ 
+<table class="table table-light table-bordered table-striped table-condensed">
+    <thead>
+        <tr>
+            <th>Nombre</th>
+            <th>Inicio</th>
+            <th>Fin</th>
+            <th>Estado Emocional Inicio</th>
+            <th>Estado Emocional Fin</th>
+            <th>Observaciones</th>
+             <th style="width: 70px"></th>
+      <th style="width: 70px"></th>
+            
+        </tr>
+    </thead>
+    <tbody id="tbody-tipodDeEjercicios">
+        <!-- Aquí se llenará dinámicamente la tabla con los datos obtenidos mediante AJAX -->
+    </tbody>
+</table>
+
+<!-- Modal -->
+<div class="modal fade" id="ModalEjercicioFisico" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="ModalTitulo"></h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <form id="formEjercicioFisico">
+          <div class="row">
+            <input type="hidden" id="EjercicioFisicoID" value="0" />
+            <div class="mb-3 col-12">
+              <label for="TipoEjercicioID" class="form-label">Tipo de Ejercicio</label>
+              @Html.DropDownListFor(model => model.TipoEjercicioID, (SelectList)ViewBag.TipoEjercicioID, "[SELECCIONE...]", new { @class = "form-control", id = "TipoEjercicioID" })
+            </div>
+
+            <div class="mb-3 col-6">
+              <label for="FechaInicio" class="form-label">Inicio</label>
+              <input type="datetime-local" id="FechaInicio" class="form-control" />
+            </div>
+
+            <div class="mb-3 col-6">
+              <label for="EstadoEmocionalInicio" class="form-label">Estado Emocional Inicio</label>
+              @Html.DropDownListFor(model => model.EstadoEmocionalInicio, (SelectList)ViewBag.EstadoEmocionalInicio, "[SELECCIONE...]", new { @class = "form-control", id = "EstadoEmocionalInicio" })
+            </div>
+
+            <div class="mb-3 col-6">
+              <label for="FechaFin" class="form-label">Fin</label>
+              <input type="datetime-local" id="FechaFin" class="form-control" />
+            </div>
+
+            <div class="mb-3 col-6">
+              <label for="EstadoEmocionalFin" class="form-label">Estado Emocional Fin</label>
+              @Html.DropDownListFor(model => model.EstadoEmocionalFin, (SelectList)ViewBag.EstadoEmocionalFin, "[SELECCIONE...]", new { @class = "form-control", id = "EstadoEmocionalFin" })
+            </div>
+
+            <div class="mb-3 col-12">
+              <label for="Observaciones" class="form-label">Observaciones</label>
+              <input type="text" class="form-control" id="Observaciones" />
+            </div>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" onclick="LimpiarModal()" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+        <button type="button" onclick="GuardarEjercicio()" class="btn btn-primary">Guardar</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+@section Scripts{
+  <script src="~/js/ejerciciosfisicos-1.0.0.js"></script>
+}
