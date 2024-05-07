@@ -42,7 +42,7 @@
             <input type="hidden" id="EjercicioFisicoID" value="0" />
             <div class="mb-3 col-12">
               <label for="TipoEjercicioID" class="form-label">Tipo de Ejercicio</label>
-              @Html.DropDownListFor(model => model.TipoEjercicioID, (SelectList)ViewBag.TipoEjercicioID, "[SELECCIONE...]", new { @class = "form-control", id = "TipoEjercicioID" })
+              @Html.DropDownList("TipoEjercicioID", null, htmlAttributes: new { @class = "form-control" })
             </div>
 
             <div class="mb-3 col-6">
@@ -52,7 +52,7 @@
 
             <div class="mb-3 col-6">
               <label for="EstadoEmocionalInicio" class="form-label">Estado Emocional Inicio</label>
-              @Html.DropDownListFor(model => model.EstadoEmocionalInicio, (SelectList)ViewBag.EstadoEmocionalInicio, "[SELECCIONE...]", new { @class = "form-control", id = "EstadoEmocionalInicio" })
+              @Html.DropDownList("EstadoEmocionalInicio", null, htmlAttributes: new { @class = "form-control" })
             </div>
 
             <div class="mb-3 col-6">
@@ -62,7 +62,7 @@
 
             <div class="mb-3 col-6">
               <label for="EstadoEmocionalFin" class="form-label">Estado Emocional Fin</label>
-              @Html.DropDownListFor(model => model.EstadoEmocionalFin, (SelectList)ViewBag.EstadoEmocionalFin, "[SELECCIONE...]", new { @class = "form-control", id = "EstadoEmocionalFin" })
+              @Html.DropDownList("EstadoEmocionalFin", null, htmlAttributes: new { @class = "form-control" })
             </div>
 
             <div class="mb-3 col-12">

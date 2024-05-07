@@ -1,16 +1,16 @@
 using EzpeletaNetCore8.Data;
 using Microsoft.AspNetCore.Mvc;
 using EzpeletaNetCore8.Models;
-using Microsoft.AspNetCore.Mvc.Rendering;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using Microsoft.AspNetCore.Mvc.Rendering;
 
 namespace EzpeletaNetCore8.Controllers
 {
     public class EjerciciosFisicosController : Controller
     {
-        private ApplicationDbContext _context;
+        private readonly ApplicationDbContext _context;
 
         public EjerciciosFisicosController(ApplicationDbContext context)
         {
@@ -25,13 +25,13 @@ namespace EzpeletaNetCore8.Controllers
                 new SelectListItem { Value = "0", Text = "[SELECCIONE...]" }
             };
 
-            // Obtener todas las opciones del enum
+            // Obtener todas las opciones del enum EstadoEmocional
             var enumValues = Enum.GetValues(typeof(EstadoEmocional)).Cast<EstadoEmocional>();
 
             // Convertir las opciones del enum en SelectListItem
             selectListItems.AddRange(enumValues.Select(e => new SelectListItem
             {
-                Value = e.GetHashCode().ToString(),
+                Value = ((int)e).ToString(),
                 Text = e.ToString().ToUpper()
             }));
 
@@ -40,7 +40,7 @@ namespace EzpeletaNetCore8.Controllers
             ViewBag.EstadoEmocionalFin = selectListItems.OrderBy(t => t.Text).ToList();
 
             var tipoEjercicios = _context.TipoEjercicios.ToList();
-            tipoEjercicios.Add(new TipoEjercicio { TipoEjercicioID = 0, Descripcion = "[SELECCIONE...]" });
+            tipoEjercicios.Insert(0, new TipoEjercicio { TipoEjercicioID = 0, Descripcion = "[SELECCIONE...]" });
             ViewBag.TipoEjercicioID = new SelectList(tipoEjercicios.OrderBy(c => c.Descripcion), "TipoEjercicioID", "Descripcion");
 
             return View();
@@ -58,7 +58,7 @@ namespace EzpeletaNetCore8.Controllers
             return Json(tipoejerciciosFisicos);
         }
 
-        //FUNCION PARA OBTENER LA DESCRIPCION DE UN TIPO DE EJERCICIO POR SU ID
+        // FUNCION PARA OBTENER LA DESCRIPCION DE UN TIPO DE EJERCICIO POR SU ID
         public JsonResult ObtenerDescripcionEjercicio(int id)
         {
             var tipoEjercicio = _context.TipoEjercicios.FirstOrDefault(t => t.TipoEjercicioID == id);
@@ -71,26 +71,23 @@ namespace EzpeletaNetCore8.Controllers
             return Json(new { descripcion = tipoEjercicio.Descripcion });
         }
 
-        public JsonResult GuardarEjercicio(int EjercicioFisicoID, int TipoEjercicioID, DateTime Inicio, DateTime Fin, EstadoEmocional EstadoEmocionalInicio, EstadoEmocional EstadoEmocionalFin, string Observaciones)
+        [HttpPost]
+        public JsonResult GuardarEjercicio([FromBody] EjercicioFisico ejercicioFisico)
         {
-            // Aquí puedes realizar las operaciones necesarias para guardar el ejercicio
-
-            // Por ejemplo, puedes crear una nueva instancia de EjercicioFisico con los parámetros recibidos y guardarla en la base de datos
-            var nuevoEjercicio = new EjercicioFisico
+            if (ModelState.IsValid)
             {
-                EjercicioFisicoID = EjercicioFisicoID,
-                TipoEjercicioID = TipoEjercicioID,
-                Inicio = Inicio,
-                Fin = Fin,
-                EstadoEmocionalInicio = EstadoEmocionalInicio,
-                EstadoEmocionalFin = EstadoEmocionalFin,
-                Observaciones = Observaciones
-            };
+                // Guardar el ejercicioFisico en la base de datos
+                _context.EjerciciosFisicos.Add(ejercicioFisico);
+                _context.SaveChanges();
 
-            // Aquí puedes guardar el nuevo ejercicio en la base de datos utilizando Entity Framework o cualquier otro método que estés utilizando
-
-            // Retorna un JsonResult indicando el éxito de la operación o cualquier otro resultado que desees devolver
-            return Json(new { success = true, message = "Ejercicio guardado exitosamente" });
+                return Json(new { success = true, message = "Ejercicio guardado exitosamente" });
+            }
+            else
+            {
+                // Si hay errores en el modelo, retornar los mensajes de error
+                var errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage));
+                return Json(new { success = false, errors = errors });
+            }
         }
     }
 }
