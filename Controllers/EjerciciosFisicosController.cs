@@ -12,6 +12,8 @@ namespace EzpeletaNetCore8.Controllers
     {
         private readonly ApplicationDbContext _context;
 
+        public int EjercicioFisicoID { get; private set; }
+
         public EjerciciosFisicosController(ApplicationDbContext context)
         {
             _context = context;
@@ -46,48 +48,101 @@ namespace EzpeletaNetCore8.Controllers
             return View();
         }
 
-        public JsonResult ListadoEjerciciosFisicos(int? id)
-        {
-            var tipoejerciciosFisicos = _context.EjerciciosFisicos.ToList();
+      public JsonResult ListadoEjerciciosFisicos(int? id, object TipoEjercicioID)
+{
+    List<VistaEjercicioFisico> ejercicioFisicosMostrar = new List<VistaEjercicioFisico>();
 
-            if (id != null)
+    var ejerciciosFisicos = _context.EjerciciosFisicos.ToList();
+
+    if (id != null)
+    {
+        ejerciciosFisicos = ejerciciosFisicos.Where(t => t.EjercicioFisicoID == id).ToList();
+    }
+
+    var tipoEjerciciosFisicos = _context.TipoEjercicios.ToList();
+
+    foreach (var ejercicioFisico in ejerciciosFisicos)
+    {
+        var tipoEjercicio = tipoEjerciciosFisicos.FirstOrDefault(t => t.TipoEjercicioID == ejercicioFisico.TipoEjercicioID);
+        if (tipoEjercicio != null)
+        {
+            var ejercicioFisicoMostrar = new VistaEjercicioFisico
             {
-                tipoejerciciosFisicos = tipoejerciciosFisicos.Where(t => t.EjercicioFisicoID == id).ToList();
+                EjercicioFisicoID = ejercicioFisico.EjercicioFisicoID,
+                TipoEjercicioID = ejercicioFisico.TipoEjercicioID,
+                TipoEjercicioDescripcion = tipoEjercicio.Descripcion,
+                FechaInicioString = ejercicioFisico.Inicio.ToString("dd/MM/yyyy HH:mm"),
+                FechaFinString = ejercicioFisico.Fin.ToString("dd/MM/yyyy HH:mm"),
+                EstadoEmocionalInicio = Enum.GetName(typeof(EstadoEmocional), ejercicioFisico.EstadoEmocionalInicio),
+                EstadoEmocionalFin = Enum.GetName(typeof(EstadoEmocional), ejercicioFisico.EstadoEmocionalFin),
+                Observaciones = ejercicioFisico.Observaciones
+            };
+            ejercicioFisicosMostrar.Add(ejercicioFisicoMostrar);
+        }
+    }
+
+    return Json(ejercicioFisicosMostrar);
+}
+
+        public JsonResult TraerEjerciciosFisicos(int? ejercicioFisicoID)
+        {
+            var ejercicioFisico = _context.EjerciciosFisicos.ToList();
+            if (ejercicioFisicoID != null)
+            {
+                ejercicioFisico = ejercicioFisico.Where(e => e.EjercicioFisicoID == ejercicioFisicoID).ToList();
             }
 
-            return Json(tipoejerciciosFisicos);
+            return Json(ejercicioFisico.ToList());
+
         }
 
-        // FUNCION PARA OBTENER LA DESCRIPCION DE UN TIPO DE EJERCICIO POR SU ID
-        public JsonResult ObtenerDescripcionEjercicio(int id)
-        {
-            var tipoEjercicio = _context.TipoEjercicios.FirstOrDefault(t => t.TipoEjercicioID == id);
+        // public JsonResult GuardarRegistro(int ejercicioFisicoID, int tipoEjercicioID, DateTime inicio, DateTime fin, EstadoEmocional estadoEmocionalInicio, EstadoEmocional estadoEmocionalFin, string observaciones)
+        // {
+        //     string resultado = "";
 
-            if (tipoEjercicio == null)
-            {
-                return Json(new { error = "Tipo de ejercicio no encontrado" });
-            }
+        //     if (ejercicioFisicoID != null)
+        //     {
+        //         if (ejercicioFisicoID == 0)
+        //         {
+        //             var EjercicioFisico = new EjercicioFisico
+        //             {
+        //                 EjercicioFisicoID = ejercicioFisicoID,
+        //                 TipoEjercicioID = tipoEjercicioID,
+        //                 Inicio = inicio,
+        //                 Fin = fin,
+        //                 EstadoEmocionalInicio = estadoEmocionalInicio,
+        //                 EstadoEmocionalFin = estadoEmocionalFin,
+        //                 Observaciones = observaciones
+        //             };
+        //             _context.EjerciciosFisicos.Add(EjercicioFisico);
+        //             _context.SaveChanges();
 
-            return Json(new { descripcion = tipoEjercicio.Descripcion });
-        }
+        //             resultado = "Ejercicio fisico agregado correctamente";
+        //         }
+        //         else
+        //         {
+        //             // EDICION
+        //             var ejercicioFisicoEditar = _context.EjerciciosFisicos.FirstOrDefault(e => EjercicioFisicoID == ejercicioFisicoID);
+        //             if (ejercicioFisicoEditar != null)
+        //             {
+        //                 ejercicioFisicoEditar.TipoEjercicioID = tipoEjercicioID;
+        //                 ejercicioFisicoEditar.Inicio = inicio;
+        //                 ejercicioFisicoEditar.Fin = fin;
+        //                 ejercicioFisicoEditar.EstadoEmocionalInicio = estadoEmocionalInicio;
+        //                 ejercicioFisicoEditar.EstadoEmocionalFin = estadoEmocionalFin;
+        //                 ejercicioFisicoEditar.Observaciones = observaciones;
 
-        [HttpPost]
-        public JsonResult GuardarEjercicio([FromBody] EjercicioFisico ejercicioFisico)
-        {
-            if (ModelState.IsValid)
-            {
-                // Guardar el ejercicioFisico en la base de datos
-                _context.EjerciciosFisicos.Add(ejercicioFisico);
-                _context.SaveChanges();
+        //                 _context.SaveChanges();
+        //                 resultado = "Ejercicio fisico editado con exito";
+        //             }
+        //         }
+        //     }
+        //     else
+        //     {
+        //         resultado = "ejercicioFisicoID no puede ser null";
+        //     }
 
-                return Json(new { success = true, message = "Ejercicio guardado exitosamente" });
-            }
-            else
-            {
-                // Si hay errores en el modelo, retornar los mensajes de error
-                var errors = ModelState.Values.SelectMany(v => v.Errors.Select(e => e.ErrorMessage));
-                return Json(new { success = false, errors = errors });
-            }
-        }
+        //     return Json(new { resultado });
+        // }
     }
 }

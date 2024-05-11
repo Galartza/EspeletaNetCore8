@@ -5,6 +5,18 @@
       "PackagePath": "staticwebassets\\EzpeletaNetCore8.bundle.scp.css"
     },
     {
+      "Id": "C:\\Users\\Usuario\\Desktop\\Mis cosas\\Tec. Desarrollo de Software 3\\Programacion III\\Poyectos\\EzpeletaNetCore8\\EzpeletaNetCore8\\wwwroot\\assets\\bg-img.png",
+      "PackagePath": "staticwebassets\\assets\\bg-img.png"
+    },
+    {
+      "Id": "C:\\Users\\Usuario\\Desktop\\Mis cosas\\Tec. Desarrollo de Software 3\\Programacion III\\Poyectos\\EzpeletaNetCore8\\EzpeletaNetCore8\\wwwroot\\assets\\img-limite-infinito.jpg",
+      "PackagePath": "staticwebassets\\assets\\img-limite-infinito.jpg"
+    },
+    {
+      "Id": "C:\\Users\\Usuario\\Desktop\\Mis cosas\\Tec. Desarrollo de Software 3\\Programacion III\\Poyectos\\EzpeletaNetCore8\\EzpeletaNetCore8\\wwwroot\\css\\FormSection-sesion.css",
+      "PackagePath": "staticwebassets\\css\\FormSection-sesion.css"
+    },
+    {
       "Id": "C:\\Users\\Usuario\\Desktop\\Mis cosas\\Tec. Desarrollo de Software 3\\Programacion III\\Poyectos\\EzpeletaNetCore8\\EzpeletaNetCore8\\wwwroot\\css\\site.css",
       "PackagePath": "staticwebassets\\css\\site.css"
     },
@@ -13,16 +25,12 @@
       "PackagePath": "staticwebassets\\favicon.ico"
     },
     {
-      "Id": "C:\\Users\\Usuario\\Desktop\\Mis cosas\\Tec. Desarrollo de Software 3\\Programacion III\\Poyectos\\EzpeletaNetCore8\\EzpeletaNetCore8\\wwwroot\\img.jpg",
-      "PackagePath": "staticwebassets\\img.jpg"
-    },
-    {
       "Id": "C:\\Users\\Usuario\\Desktop\\Mis cosas\\Tec. Desarrollo de Software 3\\Programacion III\\Poyectos\\EzpeletaNetCore8\\EzpeletaNetCore8\\wwwroot\\js\\ejerciciosfisicos-1.0.0.js",
       "PackagePath": "staticwebassets\\js\\ejerciciosfisicos-1.0.0.js"
     },
     {
-      "Id": "C:\\Users\\Usuario\\Desktop\\Mis cosas\\Tec. Desarrollo de Software 3\\Programacion III\\Poyectos\\EzpeletaNetCore8\\EzpeletaNetCore8\\wwwroot\\js\\ejerciciosfisicos-1.0.1.js",
-      "PackagePath": "staticwebassets\\js\\ejerciciosfisicos-1.0.1.js"
+      "Id": "C:\\Users\\Usuario\\Desktop\\Mis cosas\\Tec. Desarrollo de Software 3\\Programacion III\\Poyectos\\EzpeletaNetCore8\\EzpeletaNetCore8\\wwwroot\\js\\scripts.js",
+      "PackagePath": "staticwebassets\\js\\scripts.js"
     },
     {
       "Id": "C:\\Users\\Usuario\\Desktop\\Mis cosas\\Tec. Desarrollo de Software 3\\Programacion III\\Poyectos\\EzpeletaNetCore8\\EzpeletaNetCore8\\wwwroot\\js\\site.js",

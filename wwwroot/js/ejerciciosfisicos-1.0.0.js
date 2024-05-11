@@ -1,101 +1,93 @@
-window.onload = ListadoEjerciciosFisicos;
-
 function ListadoEjerciciosFisicos() {
     $.ajax({
         url: '../../EjerciciosFisicos/ListadoEjerciciosFisicos',
         data: {},
         type: 'POST',
         dataType: 'json',
-        success: function (ejerciciosFisicos) {
+        success: function (ejercicioFisicoMostrar) {
+
             let contenidoTabla = '';
-            $.each(ejerciciosFisicos, function (index, ejerciciosfisico) {
-                // Llamada a la función "ObtenerDescripcionEjercicio" con método GET
-                $.ajax({
-                    url: '../../EjerciciosFisicos/ObtenerDescripcionEjercicio/' + ejerciciosfisico.tipoEjercicioID,
-                    type: 'GET', 
-                    dataType: 'json', 
-                    success: function (data) {
-                        var descripcion = data.descripcion;
-                        contenidoTabla += `
-                            <tr>
-                                <td>${descripcion}</td>
-                                <td>${ejerciciosfisico.inicio}</td>
-                                <td>${ejerciciosfisico.fin}</td>
-                                <td>${ejerciciosfisico.estadoEmocionalInicio}</td>
-                                <td>${ejerciciosfisico.estadoEmocionalFin}</td>
-                                <td>${ejerciciosfisico.observaciones ? ejerciciosfisico.observaciones : '-'}</td>
-                                <td>
-                                    <button type="button" class="btn btn-success" onclick="AbrirModalEditar(${ejerciciosfisico.ejercicioFisicoID})">Editar</button>
-                                </td>
-                                <td>
-                                    <button type="button" class="btn btn-danger" onclick="EliminarActividad(${ejerciciosfisico.ejercicioFisicoID})">Eliminar</button>
-                                </td>
-                            </tr>`;
-                        $("#tbody-tipodDeEjercicios").html(contenidoTabla);
-                    },
-                    error: function (xhr, status) {
-                        alert('Disculpe, existió un problema al cargar la descripción del ejercicio');
-                    }
-                });
+            $.each(ejercicioFisicoMostrar, function (index, ejercicioFisicoMostrar) {
+                contenidoTabla += `
+                    <tr>
+                        <td>${ejercicioFisicoMostrar.tipoEjercicioDescripcion}</td>
+                        <td>${ejercicioFisicoMostrar.fechaInicioString}</td>
+                        <td>${ejercicioFisicoMostrar.fechaFinString}</td>
+                        <td>${ejercicioFisicoMostrar.estadoEmocionalInicio}</td>
+                        <td>${ejercicioFisicoMostrar.estadoEmocionalFin}</td>
+                        <td>${ejercicioFisicoMostrar.observaciones}</td>
+                        <td>
+                            <button type="button" class="btn btn-success" onclick="AbrirModalEditar(${ejercicioFisicoMostrar.ejercicioFisicoID})">Editar</button>
+                        </td>
+                        <td>
+                            <button type="button" class="btn btn-danger" onclick="EliminarRegistro(${ejercicioFisicoMostrar.ejercicioFisicoID})">Eliminar</button>
+                        </td>
+                    </tr>`;
             });
+            $("#tbody-tipodDeEjercicios").html(contenidoTabla);
         },
         error: function (xhr, status) {
-            alert('Disculpe, existió un problema al cargar los ejercicios fisicos');
+            alert('Disculpe, existió un problema al cargar los datos');
         }
     });
 }
 
 
-function GuardarEjercicio() {
-    // Obtener los valores del formulario
-    var tipoEjercicioID = $("#TipoEjercicioID").val();
-    var inicio = $("#FechaInicio").val();
-    var fin = $("#FechaFin").val();
-    var estadoEmocionalInicio = $("#EstadoEmocionalInicio").val();
-    var estadoEmocionalFin = $("#EstadoEmocionalFin").val();
-    var observaciones = $("#Observaciones").val();
+// function AbrirModalEditar(ejercicioFisicoID) {
+//     $.ajax({
+//         url: '../../EjercicioFisico/TraerEjerciciosFisicos',
+//         data: {ejercicioFisicoID : ejercicioFisicoID},
+//         type : 'POST',
+//         dataType : 'json',
+//         success: function (ejerciciosfisico) {
+//             let ejerciciosFisicos = ejercicioFisico[0];
 
-    // Realizar la llamada AJAX para guardar el ejercicio
-    $.ajax({
-        url: '../../EjerciciosFisicos/GuardarEjercicio',
-        type: 'POST',
-        data: {
-            TipoEjercicioID: tipoEjercicioID,
-            Inicio: inicio,
-            Fin: fin,
-            EstadoEmocionalInicio: estadoEmocionalInicio,
-            EstadoEmocionalFin: estadoEmocionalFin,
-            Observaciones: observaciones
-        },
-        success: function (response) {
-            // Verificar si la operación fue exitosa
-            if (response.success) {
-                // Mostrar un mensaje de éxito
-                alert(response.message);
-                // Limpiar el formulario y cerrar el modal
-                LimpiarModal();
-                $("#ModalEjercicioFisico").modal('hide');
-            } else {
-                // Mostrar un mensaje de error si la operación falla
-                alert('Error al guardar el ejercicio: ' + response.message);
-            }
-        },
-        error: function (xhr, status) {
-            // Mostrar un mensaje de error en caso de que la llamada AJAX falle
-            alert('Error al guardar el ejercicio: ' + status);
-        }
-    });
-}
+//             document.getElementById("EjercicioFisicoID").value = ejerciciosFisicos.ejercicioFisicoID;
+//             document.getElementById("FechaInicio").value = ejerciciosFisicos.inicio;
+//             document.getElementById("FechaFin").value = ejerciciosFisicos.fin;
+//             document.getElementById("EstadoEmocionalInicio").value = ejerciciosFisicos.estadoEmocionalInicio;
+//             document.getElementById("EstadoEmocionalFin").value = ejerciciosFisicos.estadoEmocionalFin;
+//             document.getElementById("Observaciones").value = ejerciciosFisicos.observaciones;
+//             $("#ModalEjercicioFisico").modal("show");
+//         },
+//         error: function (xhr, status) {
+//             console.log('Disculpe, existió un problema al consultar el registro para ser modificado.');
+//         }
+//     });
+// }
 
-function LimpiarModal() {
-    // Limpiar el valor del TipoEjercicioID
-    $("#TipoEjercicioID").val(0);
-    // Limpiar los campos de fecha
-    $("#FechaInicio").val('');
-    $("#FechaFin").val('');
-    // Limpiar los campos de estado emocional
-    $("#EstadoEmocionalInicio").val(0);
-    $("#EstadoEmocionalFin").val(0);
-    // Limpiar el campo de observaciones
-    $("#Observaciones").val('');
-}
+// function GuardarRegistro() {
+
+//     let ejercicioFisicoID = document.getElementById("EjercicioFisicoID").value;
+//     let tipoEjercicioID = document.getElementById("TipoEjercicioID").value;
+//     let inicio = document.getElementById("FechaInicio").value;
+//     let fin = document.getElementById("FechaFin").value;
+//     let estadoEmocionalInicio = document.getElementById("EstadoEmocionalInicio").value;
+//     let estadoEmocionalFin = document.getElementById("EstadoEmocionalFin").value;
+//     let observaciones = document.getElementById("Observaciones").value;
+
+
+//     $.ajax({
+//         url: '../EjercicioFisico/GuardarRegistro',
+//         data: {
+//             ejercicioFisicoID : ejercicioFisicoID,
+//             tipoEjercicioID : tipoEjercicioID,
+//             inicio : inicio,
+//             fin : fin,
+//             estadoEmocionalInicio : estadoEmocionalInicio,
+//             estadoEmocionalFin : estadoEmocionalFin,
+//             observaciones : observaciones
+//         },
+//         type: 'POST',
+//         dataType: 'json',
+//         success: function (response) {
+//             if (response.resultado !== "") {
+//                 alert(response.resultado);
+//                 ListadoEjerciciosFisicos();
+//             } else {
+//                 alert('No se recibió un mensaje de resultado');
+//             }
+//         },
+//     });
+//     $("ModalEjercicioFisico").modal("hide");
+// }

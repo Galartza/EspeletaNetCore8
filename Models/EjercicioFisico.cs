@@ -17,6 +17,25 @@ namespace EzpeletaNetCore8.Models
 
         public virtual TipoEjercicio TipoEjercicio { get; set; }
     }
+    public class VistaEjercicioFisico{
+        public int EjercicioFisicoID {get; set; }
+
+        public int TipoEjercicioID {get; set; }
+
+        public string? TipoEjercicioDescripcion {get; set;}
+
+        public string FechaInicioString {get; set; }
+
+        public string FechaFinString {get; set; }
+
+        public string? EstadoEmocionalInicio {get; set;}
+
+         public string ?   EstadoEmocionalFin {get; set ;}
+
+          public string? Observaciones {get; set; }
+
+
+    }
 
     public enum EstadoEmocional{
         Feliz = 1,
